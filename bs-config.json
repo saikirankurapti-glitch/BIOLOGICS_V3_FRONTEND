@@ -1,0 +1,8 @@
+{
+  "server": {
+    "baseDir": ["."],
+    "index": "templates/login.html"
+  },
+  "startPath": "templates/login.html",
+  "port": 3000
+}

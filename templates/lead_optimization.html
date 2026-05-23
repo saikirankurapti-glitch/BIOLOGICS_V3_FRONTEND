@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lead Optimization | GenQuantis Discovery</title>
+    <link rel="stylesheet" href="/static/css/platform.css?v=final_sidebar_v1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+    <style>
+        .optimization-grid {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        @media (max-width: 991px) {
+            .optimization-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-section {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .affinity-hero {
+                padding: 1.5rem;
+                text-align: center;
+            }
+
+            .affinity-hero div[style*="flex-direction: column"] {
+                align-items: center;
+            }
+
+            .affinity-hero div[style*="justify-content: space-between"] {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+
+            .affinity-hero #affinity-score {
+                font-size: 3rem;
+            }
+        }
+
+        .research-log {
+            background: #0f172a;
+            color: #4ade80;
+            font-family: 'Fira Code', monospace;
+            padding: 1.25rem;
+            border-radius: 12px;
+            height: 250px;
+            overflow-y: auto;
+            font-size: 0.75rem;
+            margin-top: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            line-height: 1.6;
+        }
+
+        .affinity-hero {
+            background: linear-gradient(135deg, #115e59 0%, #10b981 100%);
+            color: white;
+            padding: 2.5rem;
+            border-radius: 24px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(17, 94, 89, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .affinity-hero::after {
+            content: 'QUANTUM';
+            position: absolute;
+            top: -30px;
+            right: -30px;
+            font-size: 10rem;
+            font-weight: 900;
+            color: rgba(255, 255, 255, 0.03);
+            pointer-events: none;
+            letter-spacing: -5px;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+        }
+
+        .comparison-table th {
+            text-align: left;
+            padding: 1.25rem 1rem;
+            background: #f8fafc;
+            color: #4d8b85;
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .comparison-table td {
+            padding: 1.25rem 1rem;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 0.85rem;
+            color: #1e293b;
+        }
+
+        .impact-positive {
+            color: #10b981;
+            font-weight: 800;
+        }
+
+        .impact-negative {
+            color: #ef4444;
+            font-weight: 800;
+        }
+
+        .action-bar {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 2.5rem;
+            padding-top: 2rem;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes scaleUp {
+            from {
+                transform: scale(0.9);
+            }
+
+            to {
+                transform: scale(1);
+            }
+        }
+
+        #info-trigger:hover {
+            background: #10b981;
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Unified Navbar -->
+        <header class="top-navbar">
+            <div style="display: flex; align-items: center;">
+                <button class="toggle-btn" id="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <div
+                        style="background: white; color: #115e59; width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                        <i class="fas fa-flask" style="font-size: 1.2rem;"></i>
+                    </div>
+                    <span style="font-weight: 700; color: #115e59; font-size: 1.2rem;">GenQuantis Discovery <span
+                            style="font-weight: 400; opacity: 0.6;">Lead Optimization</span></span>
+                </div>
+            </div>
+            <div class="top-navbar-right-info" style="display: flex; align-items: center; gap: 1.5rem;">
+                <a href="user_guide.html" class="btn-user-guide">
+                    <i class="fas fa-book-open"></i> User Guide
+                </a>
+                <div
+                    style="color: #10b981; font-weight: 700; font-size: 0.8rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-circle" style="font-size: 0.5rem;"></i> SYSTEM ONLINE
+                </div>
+                <div
+                    style="display: flex; align-items: center; gap: 1rem; background: rgba(255,255,255,0.1); padding: 0.4rem 1rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2);">
+                    <i class="fas fa-user-circle" style="color: #10b981;"></i>
+                    <span id="nav-username"
+                        style="font-weight: 700; color: #115e59; font-size: 0.85rem;">Researcher</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Unified Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-profile">
+                <div id="nav-user-avatar"
+                    style="width: 40px; height: 40px; background: #10b981; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800;">
+                    JS</div>
+                <div>
+                    <div id="nav-user-name" style="font-weight: 700; color: #115e59; font-size: 0.9rem;">Scientist</div>
+                    <div style="font-size: 0.7rem; color: #4d8b85;">Active Session</div>
+                </div>
+            </div>
+            <a href="dashboard.html" class="sidebar-item"><i class="fas fa-th-large"></i><span>Dashboard</span></a>
+            <a href="target_explorer.html" class="sidebar-item"><i class="fas fa-microscope"></i><span>Target
+                    Discovery</span></a>
+            <a href="pocket_discovery.html" class="sidebar-item"><i class="fas fa-cube"></i><span>Pocket
+                    Discovery</span></a>
+            <a href="hit_screening.html" class="sidebar-item"><i class="fas fa-vial"></i><span>AI Hit
+                    Screening</span></a>
+            <a href="molecular_docking.html" class="sidebar-item"><i class="fas fa-link"></i><span>Molecular
+                    Docking</span></a>
+            <a href="lead_optimization.html" class="sidebar-item active"><i class="fas fa-flask"></i><span>Lead
+                    Optimization</span></a>
+            <a href="admet_prediction.html" class="sidebar-item"><i class="fas fa-chart-line"></i><span>ADMET
+                    Prediction</span></a>
+            <a href="blinded_results.html" class="sidebar-item"><i class="fas fa-mask"></i><span>Blinded
+                    Results</span></a>
+            <a href="preformulation_analysis.html" class="sidebar-item"><i
+                    class="fas fa-clipboard-check"></i><span>Preformulation</span></a>
+            <a href="formulation_design.html" class="sidebar-item"><i
+                    class="fas fa-mortar-pestle"></i><span>Formulation</span></a>
+            <a href="wet_lab.html" class="sidebar-item"><i class="fas fa-robot"></i><span>Robotic Validation</span></a>
+            <a href="user_guide.html" class="sidebar-item"><i class="fas fa-book-open"></i><span>User Guide</span></a>
+            <div class="sidebar-footer">
+                <a href="settings.html" class="sidebar-item"><i class="fas fa-cog"></i><span>Settings</span></a>
+                <a href="#" class="sidebar-item" onclick="logout()"><i
+                        class="fas fa-sign-out-alt"></i><span>Logout</span></a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <section class="hero-section">
+                <div
+                    style="background: white; width: 80px; height: 80px; border-radius: 20px; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                    <i class="fas fa-magic" style="font-size: 2.5rem; color: #10b981;"></i>
+                </div>
+                <div>
+                    <h1 style="font-size: 2.5rem; font-weight: 700; color: #115e59;">Lead Optimization</h1>
+                    <p style="color: #4d8b85; font-size: 1.1rem; margin-top: 0.5rem;">Generative evolution for binding
+                        affinity enhancement.</p>
+                </div>
+            </section>
+
+            <div class="optimization-grid">
+                <!-- Left Panel -->
+                <div style="display: flex; flex-direction: column; gap: 2rem;">
+                    <div class="premium-card"
+                        style="background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
+                        <h3
+                            style="margin-bottom: 2rem; color: #115e59; font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em;">
+                            Engine Configuration</h3>
+
+                        <div style="margin-bottom: 1.5rem;">
+                            <label
+                                style="display: block; font-size: 0.7rem; font-weight: 800; color: #4d8b85; margin-bottom: 0.5rem; text-transform: uppercase;">Active
+                                Target</label>
+                            <input type="text" id="target-id" value="EGFR_T790M"
+                                style="width: 100%; padding: 0.9rem; border-radius: 12px; border: 1px solid #e2eef1; font-weight: 600; color: #115e59; font-family: inherit;">
+                        </div>
+
+                        <div style="margin-bottom: 2rem;">
+                            <label
+                                style="display: block; font-size: 0.7rem; font-weight: 800; color: #4d8b85; margin-bottom: 0.5rem; text-transform: uppercase;">Evolution
+                                Strategy</label>
+                            <select id="strategy-select"
+                                style="width: 100%; padding: 0.9rem; border-radius: 12px; border: 1px solid #e2eef1; font-weight: 600; color: #115e59; background: white; font-family: inherit;">
+                                <option value="ga">BitGA Evolutionary</option>
+                                <option value="reinvent">REINVENT (Deep RL)</option>
+                                <option value="molgpt">MolGPT Transformer</option>
+                            </select>
+                        </div>
+
+                        <button id="optimize-btn" class="btn-launch"
+                            style="width: 100%; justify-content: center; padding: 1.1rem; font-weight: 700;">
+                            <i class="fas fa-bolt"></i> RUN OPTIMIZATION
+                        </button>
+
+                        <div id="research-log" class="research-log">
+                            [SYSTEM] Ready for generative evolution session.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Panel -->
+                <div style="display: flex; flex-direction: column;">
+                    <div class="affinity-hero">
+                        <div class="affinity-hero-inner">
+                            <div>
+                                <div
+                                    style="font-size: 0.75rem; opacity: 0.8; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em;">
+                                    Optimized Potency</div>
+                                <div id="affinity-score" style="font-size: 4rem; font-weight: 800; margin: 0.5rem 0;">
+                                    -8.10</div>
+                                <div style="font-size: 0.85rem; opacity: 0.8; font-weight: 500;">Predicted pIC50 Score
+                                </div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div id="improvement-tag"
+                                    style="background: rgba(255,255,255,0.25); padding: 0.6rem 1.2rem; border-radius: 12px; font-weight: 800; font-size: 0.8rem; letter-spacing: 0.05em;">
+                                    BASELINE</div>
+                                <div
+                                    style="margin-top: 0.5rem; font-size: 0.7rem; opacity: 0.7; font-weight: 700; text-transform: uppercase;">
+                                    Potency Delta</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="premium-card"
+                        style="background: white; padding: 2.5rem; border-radius: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem;">
+                            <h3
+                                style="color: #115e59; font-size: 1.1rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em;">
+                                Lead Evolution Analysis</h3>
+                            <div id="render-status" class="badge"
+                                style="background: #f0fdf4; color: #16a34a; font-weight: 800; padding: 0.4rem 1rem; border-radius: 8px; font-size: 0.7rem;">
+                                ENGINE_READY</div>
+                        </div>
+
+                        <div id="evolution-chart" style="height: 400px; margin-bottom: 1rem;"></div>
+
+                        <div id="results-panel"
+                            style="display: none; margin-top: 3rem; border-top: 1px solid #f1f5f9; padding-top: 2rem;">
+                            <h3
+                                style="color: #115e59; font-size: 1rem; font-weight: 800; margin-bottom: 1.5rem; text-transform: uppercase;">
+                                Modification Insights (SAR)</h3>
+                            <div style="overflow-x: auto; width: 100%; -webkit-overflow-scrolling: touch;">
+                                <table class="comparison-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Mutation / Modification</th>
+                                            <th>Δ Affinity</th>
+                                            <th>Potency Impact</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="sar-tbody"></tbody>
+                                </table>
+                            </div>
+
+                            <div class="action-bar">
+                                <button onclick="downloadReport()" class="btn-launch"
+                                    style="background: white; color: #1e293b; border: 1.5px solid #e2e8f0; box-shadow: none;">
+                                    <i class="fas fa-file-pdf" style="color: #ef4444;"></i> EXPORT REPORT
+                                </button>
+                                <button onclick="sendToWetlab()" class="btn-launch"
+                                    style="background: #f0fdfa; color: #065f46; border: 1.5px solid #ccfbf1; box-shadow: none;">
+                                    <i class="fas fa-robot" style="color: #10b981;"></i> VALIDATE IN WETLAB
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Floating Info Icon -->
+    <button id="info-trigger"
+        style="position: fixed; right: 25px; top: 100px; background: #115e59; color: white; border: none; width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.15); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); outline: none;">
+        <i class="fas fa-info-circle" style="font-size: 1.2rem;"></i>
+    </button>
+
+    <!-- Info Overlay -->
+    <div id="info-overlay"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(2, 6, 23, 0.98); z-index: 2000; justify-content: center; align-items: center; backdrop-filter: blur(15px); animation: fadeIn 0.3s ease; padding: 30px;">
+        <div
+            style="position: relative; max-width: 90%; max-height: 90vh; width: fit-content; background: #020617; padding: 8px; border-radius: 12px; border: 1px solid #1e293b; box-shadow: 0 0 50px rgba(16, 185, 129, 0.15); transform: scale(0.9); animation: scaleUp 0.3s ease forwards; display: flex; flex-direction: column; align-items: center;">
+            <button id="info-close-top"
+                style="position: absolute; top: 10px; right: 10px; background: #ef4444; color: white; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-weight: bold; font-size: 1rem; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4); z-index: 10; border: 2px solid #020617;">&times;</button>
+
+            <div
+                style="width: 100%; display: flex; justify-content: center; align-items: center; padding: 20px 10px 0 10px;">
+                <img src="/static/images/Lead Optimization.png"
+                    style="max-width: 100%; max-height: 70vh; height: auto; width: auto; object-fit: contain; display: block; border-radius: 4px;">
+            </div>
+
+            <div style="padding: 1.5rem 0; width: 100%; display: flex; justify-content: center;">
+                <button id="info-minimize-btn"
+                    style="background: #115e59; color: white; border: 1px solid rgba(255,255,255,0.1); padding: 10px 40px; border-radius: 8px; cursor: pointer; font-weight: 700; transition: all 0.3s; display: flex; align-items: center; gap: 10px; letter-spacing: 1px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
+                    <i class="fas fa-compress-alt"></i> MINIMIZE
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/main.js?v=pdf_auth_fix_v4"></script>
+    <script>
+        // Inline fallback: ensures downloadPdf is always available regardless of main.js cache
+        if (typeof window.downloadPdf !== 'function') {
+            window.downloadPdf = async function(url, filename) {
+                const token = localStorage.getItem('token');
+                if (!token) { alert('Session expired. Please log in again.'); window.location.href = 'login.html'; return; }
+                try {
+                    const response = await fetch(url, { method: 'GET', headers: { 'Authorization': 'Bearer ' + token } });
+                    if (response.status === 401) { alert('Session expired. Please log in again.'); localStorage.removeItem('token'); window.location.href = 'login.html'; return; }
+                    if (!response.ok) throw new Error('Server error ' + response.status);
+                    const blob = await response.blob();
+                    const blobUrl = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = blobUrl; a.download = filename || 'report.pdf';
+                    document.body.appendChild(a); a.click(); a.remove();
+                    window.URL.revokeObjectURL(blobUrl);
+                } catch (e) { alert('Error downloading report: ' + e.message); }
+            };
+        }
+    </script>
+    <script>
+        let currentSocket = null;
+        let currentJobId = null;
+        let evolutionData = { x: [0], y: [8.10] };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Sidebar handled by main.js
+            const username = localStorage.getItem('user_fullname') || localStorage.getItem('full_name') || 'Researcher';
+            const userDisplay = document.getElementById('nav-username');
+            if (userDisplay) userDisplay.innerText = username;
+
+            initChart();
+            document.getElementById('optimize-btn').onclick = startOptimization;
+
+            // Info Overlay Logic
+            const trigger = document.getElementById('info-trigger');
+            const overlay = document.getElementById('info-overlay');
+            const closeTop = document.getElementById('info-close-top');
+            const minimizeBtn = document.getElementById('info-minimize-btn');
+
+            if (trigger) {
+                trigger.addEventListener('click', () => {
+                    overlay.style.display = 'flex';
+                });
+            }
+
+            const hideOverlay = () => {
+                overlay.style.display = 'none';
+            };
+
+            if (closeTop) closeTop.addEventListener('click', hideOverlay);
+            if (minimizeBtn) minimizeBtn.addEventListener('click', hideOverlay);
+
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) hideOverlay();
+            });
+        });
+
+        async function startOptimization() {
+            const targetId = document.getElementById('target-id').value;
+            const strategy = document.getElementById('strategy-select').value;
+            const btn = document.getElementById('optimize-btn');
+            const log = document.getElementById('research-log');
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> INITIALIZING...';
+            log.innerHTML = '<div>[SYSTEM] Initializing Generative engine...</div>';
+
+            try {
+                const res = await fetch(`/api/optimization/run?target_id=${targetId}&model=${strategy}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ constraints: { "min_potency": 9.0 } })
+                });
+
+                if (!res.ok) throw new Error("Optimization task failed to start.");
+                const job = await res.json();
+                currentJobId = job.id || job._id;
+                connectWS(currentJobId);
+
+            } catch (e) {
+                log.innerHTML += `<div style="color: #ef4444;">[ERROR] ${e.message}</div>`;
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-bolt"></i> RUN OPTIMIZATION';
+            }
+        }
+
+        function connectWS(jobId) {
+            const wsUrl = window.getWebSocketUrl(jobId);
+            const log = document.getElementById('research-log');
+
+            if (currentSocket) currentSocket.close();
+            currentSocket = new WebSocket(wsUrl);
+
+            currentSocket.onmessage = (event) => {
+                const msg = event.data;
+                log.innerHTML += `<div>${msg}</div>`;
+                log.scrollTop = log.scrollHeight;
+
+                if (msg.includes('Score')) {
+                    const match = msg.match(/Score ([\d\.-]+)/);
+                    if (match) updateRealtimeStats(parseFloat(match[1]));
+                }
+
+                if (msg.includes('Complete') || msg.includes('Converged')) {
+                    finishJob(jobId);
+                }
+            };
+        }
+
+        function updateRealtimeStats(score) {
+            const absScore = Math.abs(score);
+            document.getElementById('affinity-score').innerText = absScore.toFixed(2);
+
+            evolutionData.x.push(evolutionData.x.length);
+            evolutionData.y.push(absScore);
+
+            Plotly.update('evolution-chart', {
+                x: [evolutionData.x],
+                y: [evolutionData.y]
+            });
+        }
+
+        async function finishJob(jobId) {
+            const btn = document.getElementById('optimize-btn');
+            const resultsPanel = document.getElementById('results-panel');
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-check"></i> OPTIMIZATION COMPLETE';
+            btn.style.background = '#10b981';
+
+            try {
+                const res = await fetch(`/api/optimization/${jobId}`);
+                const job = await res.json();
+                const results = job.results;
+
+                if (results) {
+                    document.getElementById('affinity-score').innerText = Math.abs(results.optimized_affinity).toFixed(2);
+                    document.getElementById('improvement-tag').innerText = results.improvement;
+
+                    resultsPanel.style.display = 'block';
+                    const sarTbody = document.getElementById('sar-tbody');
+                    sarTbody.innerHTML = '';
+                    results.sar_analysis.forEach(item => {
+                        const row = `
+                            <tr>
+                                <td style="font-weight: 600;">${item.mutation}</td>
+                                <td style="font-weight: 700; color: #115e59;">${item.affinity_change > 0 ? '+' : ''}${item.affinity_change}</td>
+                                <td><span class="impact-${item.impact.toLowerCase()}">${item.impact}</span></td>
+                            </tr>
+                        `;
+                        sarTbody.innerHTML += row;
+                    });
+                }
+            } catch (e) {
+                console.error("Failed to fetch results:", e);
+            }
+        }
+
+        async function downloadReport() {
+            if (!currentJobId) {
+                alert('Please run an optimization first.');
+                return;
+            }
+            // Use authenticated fetch via global helper to avoid 401
+            await window.downloadPdf(
+                `/api/optimization/${currentJobId}/report`,
+                `Lead_Optimization_Report_${currentJobId.substring(0, 8)}.pdf`
+            );
+        }
+
+        async function sendToWetlab() {
+            if (!currentJobId) return;
+            const res = await fetch(`/api/optimization/${currentJobId}`);
+            const job = await res.json();
+
+            const expRes = await fetch('/api/experiments/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: `Optimization Validation - ${job.target_id}`,
+                    experiment_type: "Potency_Validation (SPR)",
+                    target_id: job.target_id,
+                    parameters: { "optimized_smiles": job.results.optimized_smiles, "source_job": currentJobId }
+                })
+            });
+
+            if (expRes.ok) {
+                alert(`SUCCESS: Lead molecules sent to Laboratory Database. Transitioning to Robotic Validation.`);
+                window.location.href = 'wet_lab.html';
+            } else {
+                alert("Failed to synchronize with laboratory database.");
+            }
+        }
+
+        function initChart() {
+            Plotly.newPlot('evolution-chart', [{
+                x: evolutionData.x,
+                y: evolutionData.y,
+                type: 'scatter',
+                mode: 'lines+markers',
+                line: { shape: 'spline', color: '#10b981', width: 4 },
+                marker: { size: 10, color: '#115e59', line: { width: 2, color: 'white' } },
+                fill: 'tozeroy',
+                fillcolor: 'rgba(16, 185, 129, 0.08)'
+            }], {
+                margin: { t: 20, l: 50, r: 20, b: 50 },
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                xaxis: { color: '#4d8b85', gridcolor: 'rgba(0,0,0,0.05)', title: { text: 'Generation Step', font: { weight: 700 } } },
+                yaxis: { color: '#4d8b85', gridcolor: 'rgba(0,0,0,0.05)', title: { text: 'pIC50 Potency', font: { weight: 700 } } },
+                font: { family: 'Inter', size: 12 }
+            }, { responsive: true, displayModeBar: false });
+        }
+
+        function logout() { localStorage.clear(); window.location.href = 'login.html'; }
+    </script>
+</body>
+
+</html>
