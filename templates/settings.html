@@ -211,15 +211,16 @@
                     Docking</span></a>
             <a href="lead_optimization.html" class="sidebar-item"><i class="fas fa-flask"></i><span>Lead
                     Optimization</span></a>
-            <a href="admet_prediction.html" class="sidebar-item"><i class="fas fa-chart-line"></i><span>ADMET
-                    Prediction</span></a>
+            <a href="wet_lab.html" class="sidebar-item"><i class="fas fa-robot"></i><span>Robotic Validation</span></a>
             <a href="blinded_results.html" class="sidebar-item"><i class="fas fa-mask"></i><span>Blinded
                     Results</span></a>
+            <a href="admet_prediction.html" class="sidebar-item"><i class="fas fa-chart-line"></i><span>ADMET
+                    Prediction</span></a>
             <a href="preformulation_analysis.html" class="sidebar-item"><i
                     class="fas fa-clipboard-check"></i><span>Preformulation</span></a>
             <a href="formulation_design.html" class="sidebar-item"><i
                     class="fas fa-mortar-pestle"></i><span>Formulation</span></a>
-            <a href="wet_lab.html" class="sidebar-item"><i class="fas fa-robot"></i><span>Robotic Validation</span></a>
+            
             <div class="sidebar-footer">
                 <a href="settings.html" class="sidebar-item active"><i class="fas fa-cog"></i><span>Settings</span></a>
                 <a href="#" class="sidebar-item" onclick="logout()"><i
@@ -244,7 +245,8 @@
 
             <div class="settings-grid">
                 <nav class="settings-nav">
-                    <a href="#profile" class="settings-nav-item active"><i class="fas fa-user"></i> Profile Details</a>
+                    <a href="#profile" class="settings-nav-item active" onclick="switchTab('profile')"><i class="fas fa-user"></i> Profile Details</a>
+                    <a href="#security" class="settings-nav-item" onclick="switchTab('security')"><i class="fas fa-lock"></i> Security</a>
                 </nav>
 
                 <div class="settings-section">
@@ -276,6 +278,30 @@
 
                         <div id="save-status"
                             style="margin-top: 2rem; display: none; padding: 1rem; border-radius: 10px;"></div>
+                    </div>
+
+                    <div id="security" style="display: none;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                            <h3 style="color: #115e59; font-weight: 800; font-size: 1.25rem;">Security Settings</h3>
+                            <button id="btn-change-password" class="btn-edit" style="background: #3b82f6;"><i class="fas fa-key"></i> Update Password</button>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr; gap: 1.5rem; max-width: 400px;">
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label class="form-label">Current Password</label>
+                                <input type="password" id="set-current-password" class="form-input" placeholder="••••••••">
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label class="form-label">New Password</label>
+                                <input type="password" id="set-new-password" class="form-input" placeholder="••••••••">
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label class="form-label">Confirm New Password</label>
+                                <input type="password" id="set-confirm-password" class="form-input" placeholder="••••••••">
+                            </div>
+                        </div>
+
+                        <div id="password-status" style="margin-top: 2rem; display: none; padding: 1rem; border-radius: 10px;"></div>
                     </div>
                 </div>
             </div>
@@ -379,7 +405,75 @@
                     saveBtn.innerHTML = '<i class="fas fa-save"></i> Save Changes';
                 }
             };
+
+            // Change Password Logic
+            const changePwdBtn = document.getElementById('btn-change-password');
+            const pwdStatusDiv = document.getElementById('password-status');
+
+            changePwdBtn.onclick = async () => {
+                const current = document.getElementById('set-current-password').value;
+                const newPwd = document.getElementById('set-new-password').value;
+                const confirmPwd = document.getElementById('set-confirm-password').value;
+
+                if (!current || !newPwd || !confirmPwd) {
+                    alert("All password fields are required.");
+                    return;
+                }
+                
+                if (newPwd !== confirmPwd) {
+                    alert("New passwords do not match.");
+                    return;
+                }
+
+                changePwdBtn.disabled = true;
+                changePwdBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> UPDATING...';
+
+                try {
+                    const res = await fetch('/api/auth/change-password', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({ current_password: current, new_password: newPwd })
+                    });
+
+                    if (res.ok) {
+                        pwdStatusDiv.style.display = 'block';
+                        pwdStatusDiv.style.background = '#f0fdf4';
+                        pwdStatusDiv.style.color = '#166534';
+                        pwdStatusDiv.innerText = "Password updated successfully!";
+                        
+                        document.getElementById('set-current-password').value = '';
+                        document.getElementById('set-new-password').value = '';
+                        document.getElementById('set-confirm-password').value = '';
+                        
+                        setTimeout(() => pwdStatusDiv.style.display = 'none', 3000);
+                    } else {
+                        const err = await res.json();
+                        throw new Error(err.detail || "Failed to update password.");
+                    }
+                } catch (e) {
+                    pwdStatusDiv.style.display = 'block';
+                    pwdStatusDiv.style.background = '#fef2f2';
+                    pwdStatusDiv.style.color = '#991b1b';
+                    pwdStatusDiv.innerText = `Error: ${e.message}`;
+                } finally {
+                    changePwdBtn.disabled = false;
+                    changePwdBtn.innerHTML = '<i class="fas fa-key"></i> Update Password';
+                }
+            };
         });
+
+        function switchTab(tabId) {
+            // Update Navigation active state
+            document.querySelectorAll('.settings-nav-item').forEach(el => el.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+
+            // Toggle views
+            document.getElementById('profile').style.display = tabId === 'profile' ? 'block' : 'none';
+            document.getElementById('security').style.display = tabId === 'security' ? 'block' : 'none';
+        }
 
         function logout() { localStorage.clear(); window.location.href = 'login.html'; }
     </script>
