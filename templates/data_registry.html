@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GenQuantis Discovery - Data Registry</title>
+    <link rel="stylesheet" href="/static/css/platform.css?v=final_sidebar_v1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Full Width Top Navbar -->
+        <header class="top-navbar">
+            <div style="display: flex; align-items: center;">
+                <button class="toggle-btn" id="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <div style="background: white; color: var(--primary); width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                        <i class="fas fa-database" style="font-size: 1.2rem;"></i>
+                    </div>
+                    <span style="font-weight: 700; color: var(--primary); font-size: 1.2rem;">GenQuantis Discovery <span style="font-weight: 400; opacity: 0.6;">Data Registry</span></span>
+                </div>
+            </div>
+            <div class="top-navbar-right-info" style="display: flex; align-items: center; gap: 1.5rem;">
+                <a href="data_registry.html" class="btn-user-guide" style="background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3);">
+                    <i class="fas fa-database"></i> Data Registry
+                </a>
+                <div style="color: #10b981; font-weight: 700; font-size: 0.8rem; display: flex; align-items: center; gap: 0.5rem; border-right: 1px solid rgba(16,185,129,0.2); padding-right: 1rem; margin-right: 1rem;">
+                    <span class="status-pulse-small"></span> SECURE VAULT
+                </div>
+                <div style="display: flex; align-items: center; gap: 1rem; background: rgba(255,255,255,0.1); padding: 0.4rem 1rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2);">
+                    <i class="fas fa-user-circle" style="color: #10b981;"></i>
+                    <span id="nav-username" style="font-weight: 700; color: #115e59; font-size: 0.85rem;">Researcher</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-profile">
+                <div id="nav-user-avatar" style="width: 40px; height: 40px; background: #10b981; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800;">JS</div>
+                <div>
+                    <div id="nav-user-name" style="font-weight: 700; color: #115e59; font-size: 0.9rem;">Scientist</div>
+                    <div style="font-size: 0.7rem; color: #4d8b85;">Active Session</div>
+                </div>
+            </div>
+            <a href="dashboard.html" class="sidebar-item"><i class="fas fa-th-large"></i><span>Dashboard</span></a>
+            
+            <div class="sidebar-footer">
+                <a href="settings.html" class="sidebar-item"><i class="fas fa-cog"></i><span>Settings</span></a>
+                <a href="#" class="sidebar-item" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>
+            </div>
+        </aside>
+
+        <main class="main-content fade-in">
+            <div class="premium-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <h2 style="color: #115e59; margin: 0;">Your Saved Reports</h2>
+                    <select id="report-filter" style="padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid #10b981; color: #115e59; font-weight: 600; outline: none; cursor: pointer;">
+                        <option value="All">All Modules</option>
+                        <option value="Target Intelligence">Target Discovery</option>
+                        <option value="Hit Screening">AI Hit Screening</option>
+                        <option value="Lead Optimization">Lead Optimization</option>
+                        <option value="Preformulation Analysis">Preformulation</option>
+                        <option value="Formulation Design">Formulation</option>
+                    </select>
+                </div>
+                <div class="table-container">
+                    <table class="platform-table" style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="background: rgba(16, 185, 129, 0.1); text-align: left;">
+                                <th style="padding: 1rem; border-bottom: 2px solid #10b981; color: #115e59;">Report Type</th>
+                                <th style="padding: 1rem; border-bottom: 2px solid #10b981; color: #115e59;">Target/Project</th>
+                                <th style="padding: 1rem; border-bottom: 2px solid #10b981; color: #115e59;">Generated On</th>
+                                <th style="padding: 1rem; border-bottom: 2px solid #10b981; color: #115e59;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="registry-table-body">
+                            <tr>
+                                <td colspan="4" style="text-align: center; padding: 2rem; color: #64748b;">Loading registry...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/static/js/main.js?v=force_refresh_v3"></script>
+    <script src="/static/js/data_registry.js"></script>
+    <script>
+        function logout() { localStorage.clear(); window.location.href = 'login.html'; }
+        document.addEventListener('DOMContentLoaded', () => {
+            const heroDisplay = document.getElementById('nav-username');
+            if (heroDisplay) heroDisplay.innerText = localStorage.getItem('user_fullname') || localStorage.getItem('full_name') || 'Scientist';
+        });
+    </script>
+</body>
+</html>

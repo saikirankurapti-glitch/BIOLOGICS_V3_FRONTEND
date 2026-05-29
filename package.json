@@ -1,0 +1,12 @@
+{
+  "name": "genquantis-frontend",
+  "version": "1.0.0",
+  "description": "Frontend for GenQuantis Biologics Discovery Platform",
+  "scripts": {
+    "start": "lite-server",
+    "build": "echo 'No build step required'"
+  },
+  "devDependencies": {
+    "lite-server": "^2.6.1"
+  }
+}

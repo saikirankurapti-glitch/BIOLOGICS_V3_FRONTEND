@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GenQuantis Discovery</title>
+    <link rel="stylesheet" href="/static/css/platform.css?v=final_sidebar_v1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Full Width Top Navbar -->
+        <header class="top-navbar">
+            <div style="display: flex; align-items: center;">
+                <button class="toggle-btn" id="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <div
+                        style="background: white; color: var(--primary); width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                        <i class="fas fa-dna" style="font-size: 1.2rem;"></i>
+                    </div>
+                    <span style="font-weight: 700; color: var(--primary); font-size: 1.2rem;">GenQuantis Discovery <span
+                            style="font-weight: 400; opacity: 0.6;">Dashboard</span></span>
+                </div>
+            </div>
+            <div class="top-navbar-right-info" style="display: flex; align-items: center; gap: 1.5rem;">
+                <a href="data_registry.html" class="btn-user-guide" style="background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); margin-right: 0.5rem;">
+                    <i class="fas fa-database"></i> Data Registry
+                </a>
+                <a href="user_guide.html" class="btn-user-guide">
+                    <i class="fas fa-book-open"></i> User Guide
+                </a>
+                <div
+                    style="color: #10b981; font-weight: 700; font-size: 0.8rem; display: flex; align-items: center; gap: 0.5rem; border-right: 1px solid rgba(16,185,129,0.2); padding-right: 1rem; margin-right: 1rem;">
+                    <span class="status-pulse-small"></span> PLATFORM STATUS: OPTIMAL
+                </div>
+                <div
+                    style="color: #115e59; font-weight: 700; font-size: 0.8rem; font-family: 'Fira Code', monospace; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-clock" style="opacity: 0.5;"></i> <span id="real-time-clock">00:00:00</span>
+                </div>
+                <div
+                    style="display: flex; align-items: center; gap: 1rem; background: rgba(255,255,255,0.1); padding: 0.4rem 1rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2);">
+                    <i class="fas fa-user-circle" style="color: #10b981;"></i>
+                    <span id="nav-username"
+                        style="font-weight: 700; color: #115e59; font-size: 0.85rem;">Researcher</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Sidebar - Robustly Fixed -->
+        <aside class="sidebar">
+            <div class="sidebar-profile">
+                <div id="nav-user-avatar"
+                    style="width: 40px; height: 40px; background: #10b981; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800;">
+                    JS</div>
+                <div>
+                    <div id="nav-user-name" style="font-weight: 700; color: #115e59; font-size: 0.9rem;">Scientist</div>
+                    <div style="font-size: 0.7rem; color: #4d8b85;">Active Session</div>
+                </div>
+            </div>
+            <a href="dashboard.html" class="sidebar-item active"><i
+                    class="fas fa-th-large"></i><span>Dashboard</span></a>
+            <a href="target_explorer.html" class="sidebar-item"><i class="fas fa-microscope"></i><span>Target
+                    Discovery</span></a>
+            <a href="pocket_discovery.html" class="sidebar-item"><i class="fas fa-cube"></i><span>Pocket
+                    Discovery</span></a>
+            <a href="hit_screening.html" class="sidebar-item"><i class="fas fa-vial"></i><span>AI Hit
+                    Screening</span></a>
+            <a href="molecular_docking.html" class="sidebar-item"><i class="fas fa-link"></i><span>Molecular
+                    Docking</span></a>
+            <a href="lead_optimization.html" class="sidebar-item"><i class="fas fa-flask"></i><span>Lead
+                    Optimization</span></a>
+            <a href="wet_lab.html" class="sidebar-item"><i class="fas fa-robot"></i><span>Robotic Validation</span></a>
+            <a href="blinded_results.html" class="sidebar-item"><i class="fas fa-mask"></i><span>Blinded
+                    Results</span></a>
+            <a href="admet_prediction.html" class="sidebar-item"><i class="fas fa-chart-line"></i><span>ADMET
+                    Prediction</span></a>
+            <a href="preformulation_analysis.html" class="sidebar-item"><i
+                    class="fas fa-clipboard-check"></i><span>Preformulation</span></a>
+            <a href="formulation_design.html" class="sidebar-item"><i
+                    class="fas fa-mortar-pestle"></i><span>Formulation</span></a>
+            <a href="user_guide.html" class="sidebar-item"><i class="fas fa-book-open"></i><span>User Guide</span></a>
+            
+            <div class="sidebar-footer">
+                <a href="settings.html" class="sidebar-item"><i class="fas fa-cog"></i><span>Settings</span></a>
+                <a href="#" class="sidebar-item" onclick="logout()"><i
+                        class="fas fa-sign-out-alt"></i><span>Logout</span></a>
+            </div>
+        </aside>
+
+        <main class="main-content fade-in">
+            <div class="ghost-text">BIO DISCO</div>
+
+            <div class="dashboard-grid">
+                <!-- Left Panel -->
+                <div>
+                    <section class="hero-section">
+                        <img src="../static/images/mascot.png" class="mascot-img" alt="Mascot">
+                        <div class="hero-text">
+                            <h2 style="font-size: 1.5rem; font-weight: 400; color: #115e59;">Hi <span
+                                    id="hero-username">Scientist</span>,</h2>
+                            <h1 style="font-size: 2.2rem; font-weight: 700; color: #115e59;">You have a lot to catchup
+                                with...</h1>
+                        </div>
+                    </section>
+
+                    <h3 style="color: #10b981; font-weight: 700; margin-bottom: 1.5rem; font-size: 1.1rem;">Executive Performance KPIs</h3>
+                    <div class="stats-grid-container">
+                        <div class="stat-card">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+                                <div style="font-size: 0.85rem; color: #4d8b85; font-weight: 600;">Total Molecules</div>
+                                <i class="fas fa-vial" style="color: #4d8b85;"></i>
+                            </div>
+                            <div style="font-size: 1.5rem; font-weight: 700; color: #115e59;" id="stat-total">3</div>
+                            <div style="font-size: 0.65rem; color: #64748b; margin-top: 0.5rem;">Potential medicine leads identified.</div>
+                        </div>
+                        <div class="stat-card">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+                                <div style="font-size: 0.85rem; color: #4d8b85; font-weight: 600;">Success Rate</div>
+                                <i class="fas fa-check-circle" style="color: #4d8b85;"></i>
+                            </div>
+                            <div style="font-size: 1.5rem; font-weight: 700; color: #115e59;" id="stat-success">91.7%</div>
+                            <div style="font-size: 0.65rem; color: #64748b; margin-top: 0.5rem;">Percentage of drugs passing safety checks.</div>
+                        </div>
+                        <div class="stat-card">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+                                <div style="font-size: 0.85rem; color: #4d8b85; font-weight: 600;">Active Trials</div>
+                                <i class="fas fa-microchip" style="color: #4d8b85;"></i>
+                            </div>
+                            <div style="font-size: 1.5rem; font-weight: 700; color: #115e59;" id="stat-trials">4</div>
+                            <div style="font-size: 0.65rem; color: #64748b; margin-top: 0.5rem;">Ongoing laboratory experiments.</div>
+                        </div>
+                    </div>
+
+                    <div class="premium-card" style="margin-bottom: 2rem;">
+                        <h3 style="margin-bottom: 1.5rem; font-size: 1.1rem; color: #115e59;">Computational Pipeline Execution Latency</h3>
+                        <div style="height: 250px; position: relative;">
+                            <canvas id="timelineChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="premium-card" style="margin-bottom: 2rem;">
+                        <h3 style="margin-bottom: 1.5rem; font-size: 1.1rem; color: #115e59;">API Orchestration Footprint (per target)</h3>
+                        <div style="height: 250px; position: relative;">
+                            <canvas id="capitalChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="premium-card">
+                        <h3 style="margin-bottom: 1.5rem; font-size: 1.1rem; color: #115e59;">Ongoing Discoveries</h3>
+                        <div id="active-discoveries-list">
+                            <!-- Data Injected -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Panel -->
+                <div>
+                    <div class="premium-card" style="margin-bottom: 2rem;">
+                        <h3 style="margin-bottom: 1rem; color: #115e59; font-weight: 700;">Pipeline Utilization & AI Recommendation</h3>
+                        <div style="height: 300px; margin-bottom: 1rem; position: relative;">
+                            <canvas id="pipelineRadarChart"></canvas>
+                        </div>
+                        <div id="ai-recommendation-alert" style="background: rgba(245, 158, 11, 0.1); border-left: 4px solid #f59e0b; padding: 1rem; border-radius: 4px; font-size: 0.85rem; color: #b45309; display: none;">
+                            <strong>⚠️ Optimization Warning:</strong> <span id="ai-recommendation-text"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="premium-card" style="margin-bottom: 2rem;">
+                        <div
+                            style="width: 40px; height: 40px; background: #e0f2f1; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #10b981; margin-bottom: 1.5rem;">
+                            <i class="fas fa-wand-sparkles"></i>
+                        </div>
+                        <h3 style="margin-bottom: 1rem; color: #115e59; font-weight: 700;">Autonomous Discovery Engine
+                        </h3>
+                        <p style="font-size: 0.85rem; color: #4d8b85; line-height: 1.6; margin-bottom: 1.5rem;">
+                            Intelligent AI agents orchestrating high-fidelity molecular simulations, binding affinity
+                            optimization, and robotic validation workflows.
+                        </p>
+                        <button onclick="window.location.href='target_explorer.html'"
+                            style="background: #10b981; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.2s ease;">
+                            Launch Interface
+                        </button>
+                    </div>
+
+                    <div class="premium-card" style="margin-bottom: 2rem;">
+                        <div style="font-size: 0.8rem; color: #4d8b85; font-weight: 600; margin-bottom: 0.5rem;">
+                            Sequence Completion Rate</div>
+                        <div style="font-size: 2.2rem; font-weight: 800; color: #115e59; margin-bottom: 0.5rem;"
+                            id="stat-completion">17.95%</div>
+                        <div style="font-size: 0.75rem; color: #4d8b85;">from <span id="stat-seq-count">21</span>
+                            Sequences</div>
+                    </div>
+
+
+                </div>
+            </div>
+
+            <!-- Dashboard Footer -->
+            <footer style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid rgba(16,185,129,0.2); display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; color: #64748b;">
+                <div>
+                    &copy; 2026 GenQuantis. All rights reserved.
+                </div>
+                <div style="display: flex; gap: 1.5rem; align-items: center;">
+                    <a href="https://genquantis.com" target="_blank" style="color: #10b981; text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 0.4rem;">
+                        <i class="fas fa-globe"></i> genquantis.com
+                    </a>
+                    <a href="mailto:discovery@genquantis.com" style="color: #10b981; text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 0.4rem;">
+                        <i class="fas fa-envelope"></i> discovery@genquantis.com
+                    </a>
+                    <a href="tel:7036955133" style="color: #115e59; text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 0.4rem;">
+                        <i class="fas fa-headset"></i> Contact Us
+                    </a>
+                </div>
+            </footer>
+        </main>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="/static/js/main.js?v=force_refresh_v3"></script>
+    <script>
+        function logout() { localStorage.clear(); window.location.href = 'login.html'; }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Start Real-time Clock
+            const updateClock = () => {
+                const el = document.getElementById('real-time-clock');
+                if (el) {
+                    const now = new Date();
+                    el.innerText = now.toLocaleTimeString();
+                }
+            };
+            setInterval(updateClock, 1000);
+            updateClock();
+
+            // Set hero username
+            const heroDisplay = document.getElementById('hero-username');
+            if (heroDisplay) heroDisplay.innerText = localStorage.getItem('user_fullname') || localStorage.getItem('full_name') || 'Scientist';
+
+            // Chart Instances
+            let radarChart = null;
+            let timelineChart = null;
+            let capitalChart = null;
+
+            // Initialize Static Dashboard Charts
+            const initStaticCharts = () => {
+                try {
+                    // 1. Pipeline Execution Latency
+                    const tlCtx = document.getElementById('timelineChart');
+                    if (tlCtx && !timelineChart) {
+                        timelineChart = new Chart(tlCtx.getContext('2d'), {
+                            type: 'bar',
+                            data: {
+                                labels: ['Target ID (APIs)', 'Hit Screening (RDKit)', 'Docking (Smina)', 'ADMET (Models)'],
+                                datasets: [
+                                    {
+                                        label: 'Execution Time (Seconds)',
+                                        data: [1.2, 0.4, 45.6, 2.3],
+                                        backgroundColor: '#10b981',
+                                        borderWidth: 0
+                                    }
+                                ]
+                            },
+                            options: {
+                                indexAxis: 'y',
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                scales: {
+                                    x: { type: 'logarithmic', min: 0.1, title: { display: true, text: 'Time (Seconds, Log Scale)' } },
+                                    y: { stacked: false }
+                                },
+                                plugins: {
+                                    tooltip: { mode: 'index', intersect: false }
+                                }
+                            }
+                        });
+                    }
+                } catch(e) { console.error("Error init timelineChart", e); }
+
+                try {
+                    // 2. API Footprint Chart
+                    const capCtx = document.getElementById('capitalChart');
+                    if (capCtx && !capitalChart) {
+                        capitalChart = new Chart(capCtx.getContext('2d'), {
+                            type: 'bar',
+                            data: {
+                                labels: ['UniProt', 'ChEMBL', 'PDB/AlphaFold', 'RDKit Ops', 'Smina Threads'],
+                                datasets: [
+                                    {
+                                        label: 'Concurrent Requests/Ops',
+                                        data: [4, 1, 2, 50, 16],
+                                        backgroundColor: '#115e59'
+                                    }
+                                ]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                scales: {
+                                    y: { type: 'linear', beginAtZero: true, title: { display: true, text: 'Requests per run' } }
+                                },
+                                plugins: {
+                                    tooltip: { callbacks: { label: (ctx) => `${ctx.dataset.label}: ${ctx.raw}` } }
+                                }
+                            }
+                        });
+                    }
+                } catch(e) { console.error("Error init capitalChart", e); }
+            };
+
+            initStaticCharts();
+
+            // Dashboard logic
+            const updateStats = async () => {
+                try {
+                    const res = await fetch('/api/monitoring/stats');
+                    if (res.ok) {
+                        const s = await res.json();
+                        if (document.getElementById('stat-total')) document.getElementById('stat-total').textContent = (s.target_count || 0).toLocaleString();
+                        if (document.getElementById('stat-success')) document.getElementById('stat-success').textContent = (s.system_health || '0') + '%';
+                        if (document.getElementById('stat-trials')) document.getElementById('stat-trials').textContent = (s.experiment_count || 0);
+                        if (document.getElementById('stat-completion')) document.getElementById('stat-completion').textContent = (s.completion_rate || '0') + '%';
+                        if (document.getElementById('stat-seq-count')) document.getElementById('stat-seq-count').textContent = (s.total_sequences || '0');
+                        
+                        // Removed dynamic update of static KPIs to maintain original formatting
+
+                        // Update Radar Chart with Real Data
+                        if (s.pipeline) {
+                            const labels = Object.keys(s.pipeline);
+                            const data = Object.values(s.pipeline);
+                            
+                            if (radarChart) {
+                                radarChart.data.datasets[0].data = data;
+                                radarChart.update();
+                            } else {
+                                const ctx = document.getElementById('pipelineRadarChart').getContext('2d');
+                                radarChart = new Chart(ctx, {
+                                    type: 'radar',
+                                    data: {
+                                        labels: labels,
+                                        datasets: [{
+                                            label: 'Module Usage Count',
+                                            data: data,
+                                            backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                                            borderColor: 'rgba(16, 185, 129, 1)',
+                                            pointBackgroundColor: 'rgba(17, 94, 89, 1)',
+                                            pointBorderColor: '#fff',
+                                            pointHoverBackgroundColor: '#fff',
+                                            pointHoverBorderColor: 'rgba(17, 94, 89, 1)'
+                                        }]
+                                    },
+                                    options: {
+                                        responsive: true,
+                                        maintainAspectRatio: false,
+                                        scales: {
+                                            r: {
+                                                angleLines: { color: 'rgba(0, 0, 0, 0.1)' },
+                                                grid: { color: 'rgba(0, 0, 0, 0.1)' },
+                                                pointLabels: {
+                                                    font: { size: 11, family: 'Inter' },
+                                                    color: '#4d8b85'
+                                                },
+                                                ticks: { display: false }
+                                            }
+                                        },
+                                        plugins: { legend: { display: false } }
+                                    }
+                                });
+                            }
+
+                            // AI Recommendation Logic based on zero usage
+                            let missed = [];
+                            labels.forEach((label, i) => {
+                                if (data[i] === 0) missed.push(label);
+                            });
+
+                            const alertBox = document.getElementById('ai-recommendation-alert');
+                            const alertText = document.getElementById('ai-recommendation-text');
+                            
+                            if (missed.includes('ADMET Profiling')) {
+                                alertText.innerHTML = `You have bypassed the <strong>ADMET Profiling</strong> model. Running ADMET before Robotic Validation increases clinical success probability by 15% and saves an average of $4,000 in wet-lab costs. <a href="admet_prediction.html" style="color: #b45309; text-decoration: underline;">Launch Model</a>`;
+                                alertBox.style.display = 'block';
+                            } else if (missed.includes('Robotic Validation')) {
+                                alertText.innerHTML = `You have computationally optimized targets but haven't engaged <strong>Robotic Validation</strong>. Validating hits decreases downstream friction by 40%. <a href="wet_lab.html" style="color: #b45309; text-decoration: underline;">Launch Wet Lab</a>`;
+                                alertBox.style.display = 'block';
+                            } else if (missed.includes('Hit Screening')) {
+                                alertText.innerHTML = `Your pipeline lacks <strong>Hit Screening</strong> data. Start an AI screen to evaluate millions of compounds in hours. <a href="hit_screening.html" style="color: #b45309; text-decoration: underline;">Start Screening</a>`;
+                                alertBox.style.display = 'block';
+                            } else {
+                                alertBox.style.display = 'none';
+                            }
+
+                        }
+                    }
+                } catch (e) { console.error(e); }
+            };
+
+            const updateExps = async () => {
+                try {
+                    const res = await fetch('/api/experiments/');
+                    if (res.ok) {
+                        const exps = await res.json();
+                        const list = document.getElementById('active-discoveries-list');
+                        if (!list) return;
+                        list.innerHTML = '';
+                        exps.slice(0, 5).forEach(exp => {
+                            const item = document.createElement('div');
+                            item.style.display = 'flex';
+                            item.style.alignItems = 'center';
+                            item.style.justifyContent = 'space-between';
+                            item.style.padding = '1rem';
+                            item.style.borderBottom = '1px solid #f1f5f9';
+
+                            const statusColor = exp.status === 'Completed' ? '#10b981' : '#f59e0b';
+
+                            item.innerHTML = `
+                                <div style="display: flex; align-items: center; gap: 1rem;">
+                                    <div style="width: 10px; height: 10px; border-radius: 50%; background: ${statusColor};"></div>
+                                    <div>
+                                        <div style="font-weight: 700; color: #115e59; font-size: 0.9rem;">${exp.name}</div>
+                                        <div style="font-size: 0.75rem; color: #4d8b85;">${exp.experiment_type} • ${exp.target_id}</div>
+                                    </div>
+                                </div>
+                                <div style="font-size: 0.75rem; color: #64748b; font-weight: 600;">${new Date(exp.created_at + (exp.created_at.endsWith('Z') ? '' : 'Z')).toLocaleString([], { dateStyle: 'medium', timeStyle: 'medium' })}</div>
+                            `;
+                            list.appendChild(item);
+                        });
+                        if (exps.length === 0) {
+                            list.innerHTML = '<div style="padding: 2rem; text-align: center; color: #94a3b8; font-size: 0.85rem;">No active discoveries found.</div>';
+                        }
+                    }
+                } catch (e) { console.error(e); }
+            };
+
+            updateStats();
+            updateExps();
+            setInterval(updateStats, 5000);
+            setInterval(updateExps, 10000);
+        });
+    </script>
+</body>
+
+</html>
